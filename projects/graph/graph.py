@@ -77,13 +77,18 @@ class Graph:
         """
         # Create an empty queue and enqueue the PATH TO starting_vertex 
         queue = Queue()
-        queue.enqueue([starting_vertex])
+        queue.enqueue({
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]
+        })
         # Create an empty set to track visited verticies
         visited = set()
         # while the queue is not empty:
         while queue.size() > 0: 
             # get current vertex PATH (dequeue from queue)
-            path = queue.dequeue()
+            obj = queue.dequeue()
+            path = obj['path']
+            vertex = obj['current_vertex']
             # set the current vertex to the LAST element of the PATH
             current = path[-1]
             # Check if the current vertex has not been visited:
@@ -94,14 +99,21 @@ class Graph:
                     return path
                 # Mark the current vertex as visited
                 visited.add(current)
-                    # Add the current vertex to a visited_set
+                    
+                for neighbor_vertex in self.get_neighbors(vertex):
                 # Queue up NEW paths with each neighbor:
-                path.extend(self.get_neighbors(current))
-                queue.enqueue(path)
                     # take current path
                     # append the neighbor to it
                     # queue up NEW path
-                return path
+                    new_path = list(path)
+                    new_path.append(neighbor_vertex)
+
+                    queue.enqueue({
+                        'current_vertex': neighbor_vertex,
+                        'path': new_path
+                    })
+                    
+
     def dfs(self, starting_vertex, destination_vertex):
         """
         Return a list containing a path from
