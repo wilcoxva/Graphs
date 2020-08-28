@@ -47,6 +47,7 @@ class Graph:
             current = queue.pop(0)
             # Check if the current vertex has not been visited:
             if current not in visited:
+                print(current)
                 # Mark the current vertex as visited
                 visited.add(current)
                 # queue up all the current vertex's neighbors (so we can visit them next)
@@ -57,20 +58,23 @@ class Graph:
         Print each vertex in depth-first order
         beginning from starting_vertex.
         """
-        # Create an empty stack and add the starting_vertex 
+        # Create an empty queue and enqueue the starting_vertex
+        stack = Stack()
+        stack.push(starting_vertex)
         # Create an empty set to track visited verticies
-
-        # while the stack is not empty:
-            # get current vertex (pop from stack)
-
+        visited = set()
+        # while the queue is not empty:
+        while stack.size() > 0:
+            # get current vertex (dequeue from queue)
+            current = stack.pop()
             # Check if the current vertex has not been visited:
-                # print the current vertex
+            if current not in visited:
+                print(current)
                 # Mark the current vertex as visited
-                    # Add the current vertex to a visited_set
-
-
-                # push up all the current vertex's neighbors (so we can visit them next
-        pass  # TODO
+                visited.add(current)
+                # queue up all the current vertex's neighbors (so we can visit them next)
+                for neighbor in self.get_neighbors(current):
+                    stack.push(neighbor)
 
     def dft_recursive(self, start_vert, visited=None):
         """
