@@ -58,20 +58,39 @@ player = Player(world.starting_room)
 traversal_path = []
 
 ####################################################
-# He said to start out with DFT and end up using BFS:
-def dft(self, starting_vertex):
-    stack = Stack()
-    stack.push(starting_vertex)
-    visited = set()
-    while stack.size() > 0:
-        current = stack.pop()
-        if current not in visited:
-            print(current)
-            visited.add(current)
-            for neighbor in self.get_neighbors(current):
-                stack.push(neighbor)
-# I was thinking of using world.starting_room as starting_vertex but that doesn't seem to work
-# I was thinking of replacing visited with traversal_path but that didn't work 
+# Decided to use DFS instead of DFT because it makes more sense with a path
+def dfs(self, starting_vertex, destination_vertex):
+        """
+        Return a list containing a path from
+        starting_vertex to destination_vertex in
+        depth-first order.
+        """
+        stack = Stack()
+        visited_vertices = set()
+        stack.push({ 
+            'current_vertex': starting_vertex,
+            'path': [starting_vertex]        
+        })
+        while stack.size() > 0:
+            current_obj = stack.pop()
+            current_path = current_obj['path']
+            current_vertex = current_obj['current_vertex']
+            if current_vertex not in visited_vertices:
+
+                if current_vertex == destination_vertex:
+                    return current_path
+
+                visited_vertices.add(current_vertex)
+
+                for neighbor_vertex in self.get_neighbors(current_vertex):
+                    new_path = list(current_path)
+                    new_path.append(neighbor_vertex)
+                    stack.push({
+                        'current_vertex': neighbor_vertex,
+                        'path': new_path
+                    })
+        return None
+        
 def bfs(self, starting_vertex, destination_vertex):
     queue = Queue()
     visited_vertices = set()
