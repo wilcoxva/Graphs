@@ -59,7 +59,7 @@ traversal_path = []
 
 ####################################################
 # Decided to use DFS instead of DFT because it makes more sense with a path
-def dfs(self, starting_vertex, destination_vertex):
+def dfs(graph, starting_vertex):
         """
         Return a list containing a path from
         starting_vertex to destination_vertex in
@@ -76,12 +76,7 @@ def dfs(self, starting_vertex, destination_vertex):
             current_path = current_obj['path']
             current_vertex = current_obj['current_vertex']
             if current_vertex not in visited_vertices:
-
-                if current_vertex == destination_vertex:
-                    return current_path
-
                 visited_vertices.add(current_vertex)
-
                 for neighbor_vertex in self.get_neighbors(current_vertex):
                     new_path = list(current_path)
                     new_path.append(neighbor_vertex)
@@ -90,8 +85,8 @@ def dfs(self, starting_vertex, destination_vertex):
                         'path': new_path
                     })
         return None
-        
-def bfs(self, starting_vertex, destination_vertex):
+
+def bfs(graph, starting_vertex):
     queue = Queue()
     visited_vertices = set()
     queue.enqueue({ 
@@ -103,8 +98,6 @@ def bfs(self, starting_vertex, destination_vertex):
         current_path = current_obj['path']
         current_vertex = current_obj['current_vertex']
         if current_vertex not in visited_vertices:
-            if current_vertex == destination_vertex:
-                return current_path
             visited_vertices.add(current_vertex)
             for neighbor_vertex in self.get_neighbors(current_vertex):
                 new_path = list(current_path)
@@ -114,6 +107,15 @@ def bfs(self, starting_vertex, destination_vertex):
                     'path': new_path
                 })
     return None
+
+def get_neighbors:
+    pass
+
+def find_room(graph, current_room):
+    pass
+
+def create_path:
+    pass
 ########################################################
 
 # TRAVERSAL TEST
