@@ -108,24 +108,13 @@ def bfs(graph, starting_vertex):
                 })
     return None
 
-def get_neighbors(graph, room):
-    return list(graph[room].values())
+def get_neighbors:
+    pass
 
 def find_room(graph, current_room):
-    room_path = bfs(graph, current_room)
-    path = []
+    pass
 
-    for i in range(0, len(room_path) - 1):
-        graph_list = list(
-            graph[room_path[i]].items())
-        direction = ''
-        for entry in graph_list:
-            if entry[1] == room_path[i + 1]:
-                direction = entry[0]
-        path.append(direction)
-    return(path)
-
-def create_path():
+def create_path:
     pass
 ########################################################
 
