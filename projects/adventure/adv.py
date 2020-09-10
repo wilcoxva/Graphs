@@ -5,7 +5,7 @@ from world import World
 import random
 from ast import literal_eval
 
-###############################
+####################################
 class Queue():
     def __init__(self):
         self.queue = []
@@ -31,7 +31,7 @@ class Stack():
             return None
     def size(self):
         return len(self.stack)
-###################################
+######################################
 
 # Load world
 world = World()
@@ -40,9 +40,9 @@ world = World()
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
-map_file = "maps/test_loop.txt"
+# map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -57,68 +57,61 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
-####################################################
-# Decided to use DFS instead of DFT because it makes more sense with a path
-def dfs(graph, starting_vertex):
-        """
-        Return a list containing a path from
-        starting_vertex to destination_vertex in
-        depth-first order.
-        """
-        stack = Stack()
-        visited_vertices = set()
-        stack.push({ 
-            'current_vertex': starting_vertex,
-            'path': [starting_vertex]        
-        })
-        while stack.size() > 0:
-            current_obj = stack.pop()
-            current_path = current_obj['path']
-            current_vertex = current_obj['current_vertex']
-            if current_vertex not in visited_vertices:
-                visited_vertices.add(current_vertex)
-                for neighbor_vertex in self.get_neighbors(current_vertex):
-                    new_path = list(current_path)
-                    new_path.append(neighbor_vertex)
-                    stack.push({
-                        'current_vertex': neighbor_vertex,
-                        'path': new_path
-                    })
-        return None
+def adjacent_rooms_check(current_room, check_room):
+    if current_room == check_room:
+        return 'same room'
+    elif current_room.n_to == check_room:
+        return 'n'
+    elif current_room.s_to == check_room:
+        return 's'
+    elif current_room.e_to == check_room:
+        return 'e'
+    elif current_room.w_to == check_room:
+        return 'w'
 
-def bfs(graph, starting_vertex):
-    queue = Queue()
-    visited_vertices = set()
-    queue.enqueue({ 
-        'current_vertex': starting_vertex,
-        'path': [starting_vertex]        
-    })
-    while queue.size() > 0:
-        current_obj = queue.dequeue()
-        current_path = current_obj['path']
-        current_vertex = current_obj['current_vertex']
-        if current_vertex not in visited_vertices:
-            visited_vertices.add(current_vertex)
-            for neighbor_vertex in self.get_neighbors(current_vertex):
-                new_path = list(current_path)
-                new_path.append(neighbor_vertex)
-                queue.enqueue({
-                    'current_vertex': neighbor_vertex,
-                    'path': new_path
-                })
-    return None
+def bfs(current_room, target_room):
+    q = Queue()
+    q.enqueue([current_room])
+    visited = set()
+    while q.size() > 0:
+        path = q.dequeue()
+        current = path[-1]
+        if current not in visited:
+            if current == target_room:
+                return path
+            visited.add(current)
+            for option in current.get_exits():
+                new_path = list(path)
+                new_path.append(current.get_room_in_direction(option))
+                q.enqueue(new_path)
+                
+s = Stack()
+s.push([player.current_room])
+visited = set()
+while s.size() > 0:
+    path = s.pop()
+    current = path[-1]
+    player_position = adjacent_rooms_check(player.current_room, current)
+    
+    if current not in visited:
+        if player_position != None and player_position != 'same room':
+            player.travel(player_position)
+            traversal_path.append(player_position)
+        visited.add(current)
+        if player_position == 'same room':
+            for next_room in player.current_room.get_exits():
+                s.push([player.current_room.get_room_in_direction(next_room)])
+        else:
+            shortest = bfs(player.current_room, current)
+            for room in shortest:
+                direction = adjacent_rooms_check(player.current_room, room)
+                if direction != 'same room':
+                    traversal_path.append(direction)
+                    player.travel(direction)
+            for next_room in player.current_room.get_exits():
+                s.push([player.current_room.get_room_in_direction(next_room)])
 
-def get_neighbors:
-    pass
-
-def find_room(graph, current_room):
-    pass
-
-def create_path:
-    pass
-########################################################
-
-# TRAVERSAL TEST
+# TRAVERSAL TEST - DO NOT MODIFY
 visited_rooms = set()
 player.current_room = world.starting_room
 visited_rooms.add(player.current_room)
@@ -138,12 +131,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
